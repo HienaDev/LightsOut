@@ -17,31 +17,32 @@ public class BulbManager : MonoBehaviour
     private GameObject currentlySelectedBulb;
     public int bulbIndex;
 
+    private ItemSwapper itemSwapper;
 
     void Start()
     {
-       
+        itemSwapper = GetComponent<ItemSwapper>();
         instantiatedBulbs = new List<GameObject>();
         BulbSpawner();
     }
 
     private void Update()
     {
-        
+
     }
 
 
     public void BulbSpawner()
     {
 
-        foreach(GameObject bulb in instantiatedBulbs)
+        foreach (GameObject bulb in instantiatedBulbs)
         {
             Destroy(bulb);
         }
 
         instantiatedBulbs.Clear();
 
-      
+
 
         //// Calculate offset to center bulbs
         //float centerOffset = (numberOfBulbs - 1) * 0.5f * bulbDistance;
@@ -71,6 +72,7 @@ public class BulbManager : MonoBehaviour
             bulb.transform.position = new Vector3(xPos, initialPosition.position.y, zPos); // Keep Z fixed
         }
 
+        itemSwapper.SwapItemsInList(instantiatedBulbs);
 
     }
 

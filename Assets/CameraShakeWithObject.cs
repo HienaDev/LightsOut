@@ -107,8 +107,9 @@ public class CameraShakeWithObject : MonoBehaviour
         else
         {
             // Reset the camera to its original position and rotation when there is no shake
-            transform.position = originalCameraPosition;
-            transform.rotation = Quaternion.Slerp(transform.rotation, originalCameraRotation, Time.deltaTime * shakeRampDownSpeed);
+            //transform.position = originalCameraPosition;
+            //transform.rotation = Quaternion.Slerp(transform.rotation, originalCameraRotation, Time.deltaTime * shakeRampDownSpeed);
+            
         }
     }
 }
