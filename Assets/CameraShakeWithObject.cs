@@ -3,7 +3,7 @@ using UnityEngine;
 public class CameraShakeWithObject : MonoBehaviour
 {
     [Header("Shake Settings")]
-    private GameObject shakeObject;          // The object to shake around (required)
+    public GameObject shakeObject;          // The object to shake around (required)
     public float maxShakeIntensity = 0.5f;  // Maximum intensity of the shake
     public float shakeRampUpSpeed = 1f;     // Speed at which the shake intensity increases
     public float shakeRampDownSpeed = 2f;   // Speed at which the shake intensity decreases
@@ -55,7 +55,7 @@ public class CameraShakeWithObject : MonoBehaviour
             // Handle the initial delay
             if (delayTimer < initialDelay)
             {
-                Debug.Log("delay");
+
                 delayTimer += Time.deltaTime;
 
                 // Smoothly rotate the camera to look at the shakeObject during the delay
