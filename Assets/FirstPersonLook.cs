@@ -5,7 +5,13 @@ public class FirstPersonLook : MonoBehaviour
     [SerializeField] private float sensitivity = 2f; // Mouse sensitivity
     [SerializeField] private Transform playerBody;   // The player's body (to rotate the entire character)
 
-    private float xRotation = 0f;
+    [SerializeField] private float minXRotation = -90f; // Minimum vertical rotation (up/down)
+    [SerializeField] private float maxXRotation = 90f;  // Maximum vertical rotation (up/down)
+    [SerializeField] private float minYRotation = -90f; // Minimum horizontal rotation (left/right)
+    [SerializeField] private float maxYRotation = 90f;  // Maximum horizontal rotation (left/right)
+
+    private float xRotation = 0f; // Vertical rotation (up/down)
+    private float yRotation = 0f; // Horizontal rotation (left/right)
 
     private bool canMove = true;
 
@@ -20,9 +26,7 @@ public class FirstPersonLook : MonoBehaviour
 
     void Update()
     {
-
-
-        if(canMove)
+        if (canMove)
             LookAround();
     }
 
@@ -34,10 +38,13 @@ public class FirstPersonLook : MonoBehaviour
 
         // Rotate the camera up/down (invert Y movement)
         xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f); // Limit vertical rotation
+        xRotation = Mathf.Clamp(xRotation, minXRotation, maxXRotation); // Limit vertical rotation
 
-        // Apply rotation
-        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-        playerBody.Rotate(Vector3.up * mouseX); // Rotate the player horizontally
+        // Rotate the player left/right
+        yRotation += mouseX;
+        yRotation = Mathf.Clamp(yRotation, minYRotation, maxYRotation); // Limit horizontal rotation
+
+        // Apply rotations
+        transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0f); // Apply both vertical and horizontal rotation to the camera
     }
 }

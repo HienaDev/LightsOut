@@ -20,6 +20,7 @@ public class CameraShakeWithObject : MonoBehaviour
 
     [SerializeField] private FirstPersonLook firstPersonLook;
 
+    [SerializeField] private RotateObject rotateObject;
     public void SetObject(GameObject sObject)
     {
         shakeObject = sObject;
@@ -37,7 +38,9 @@ public class CameraShakeWithObject : MonoBehaviour
         // If no object is assigned, do nothing
         if (shakeObject == null)
         {
-            firstPersonLook.ToggleMove(true); // Disable player movement while shaking
+            if(!rotateObject.isRotating)
+                firstPersonLook.ToggleMove(true); // Disable player movement while shaking
+
             return;
         }
             
@@ -51,13 +54,11 @@ public class CameraShakeWithObject : MonoBehaviour
         // Check if the left mouse button is held down
         if (Input.GetMouseButton(0))
         {
+            delayTimer += Time.deltaTime;
             firstPersonLook.ToggleMove(false); // Disable player movement while shaking
             // Handle the initial delay
             if (delayTimer < initialDelay)
             {
-
-                delayTimer += Time.deltaTime;
-
                 // Smoothly rotate the camera to look at the shakeObject during the delay
                 Quaternion targetRotation = Quaternion.LookRotation(shakeObject.transform.position - transform.position);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, delayTimer / initialDelay);

@@ -1,10 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
+using System.Collections;
 
 public class BulbManager : MonoBehaviour
 {
-    [SerializeField] private int numberOfBulbs = 3;
-    [SerializeField] private int numberOfBadBulbs = 1;
+    //[SerializeField] private int numberOfBulbs = 3;
+    //[SerializeField] private int numberOfBadBulbs = 1;
     [SerializeField] private GameObject bulbPrefab;
     [SerializeField] private Transform initialPosition;
     [SerializeField] private Transform playerTransform; // Center of radial layout
@@ -19,11 +21,24 @@ public class BulbManager : MonoBehaviour
 
     private ItemSwapper itemSwapper;
 
+    private int currentRound = 0;
+
+    [Serializable]
+    public struct Round
+    {
+        public int numberOfBulbs;
+        public int numberOfBadBulbs;
+    }
+
+    [SerializeField] private Round[] rounds;
+
     void Start()
     {
         itemSwapper = GetComponent<ItemSwapper>();
         instantiatedBulbs = new List<GameObject>();
-        BulbSpawner();
+
+        BulbSpawner(7, 2);
+        //StartCoroutine(TestRoundsCR());
     }
 
     private void Update()
@@ -31,8 +46,17 @@ public class BulbManager : MonoBehaviour
 
     }
 
+    private IEnumerator TestRoundsCR()
+    {
+        for (int i = 0; i < rounds.Length; i++)
+        {
+            yield return new WaitForSeconds(5f);
+            BulbSpawner(rounds[i].numberOfBulbs, rounds[i].numberOfBadBulbs);
+        }
+    }
 
-    public void BulbSpawner()
+
+    public void BulbSpawner(int numberOfBulbs, int numberOfBadBulbs)
     {
 
         foreach (GameObject bulb in instantiatedBulbs)
@@ -59,6 +83,22 @@ public class BulbManager : MonoBehaviour
         float angleStep = bulbDistance / radius; // Angle step based on distance and radius
         float startAngle = -((numberOfBulbs - 1) * angleStep) / 2; // Center bulbs around player
 
+
+        HashSet<int> badBulbIndices = new HashSet<int>();
+
+        int attempts = 0;
+        while (badBulbIndices.Count < numberOfBadBulbs && attempts < 100)
+        {
+            badBulbIndices.Add(UnityEngine.Random.Range(0, numberOfBulbs));
+            attempts++;
+        }
+
+        if(attempts >= 100)
+        {
+            Debug.LogError("Could not find enough unique bad bulb indices");
+            return;
+        }
+
         for (int i = 0; i < numberOfBulbs; i++)
         {
             float angle = startAngle + (i * angleStep); // Angle for this bulb
@@ -68,6 +108,12 @@ public class BulbManager : MonoBehaviour
 
             GameObject bulb = Instantiate(bulbPrefab);
             instantiatedBulbs.Add(bulb);
+
+            if(badBulbIndices.Contains(i))
+                bulb.GetComponent<Renderer>().material.color = Color.red;
+            else
+                bulb.GetComponent<Renderer>().material.color = Color.blue;
+
             bulb.GetComponent<Bulb>().bulbIndex = i;
             bulb.transform.position = new Vector3(xPos, initialPosition.position.y, zPos); // Keep Z fixed
         }
