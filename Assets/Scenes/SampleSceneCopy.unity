@@ -586,8 +586,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 005ffa806336b224da0bf0fbe422230b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberOfBulbs: 7
-  numberOfBadBulbs: 1
   bulbPrefab: {fileID: 5109572656524851455, guid: b161d36c2e208114f9b6db7011c04ad3, type: 3}
   initialPosition: {fileID: 20861920}
   playerTransform: {fileID: 330585546}
@@ -595,6 +593,7 @@ MonoBehaviour:
   bulbDistance: 0.3
   cameraShakeWithObject: {fileID: 330585549}
   bulbIndex: 0
+  rounds: []
 --- !u!114 &238673750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -844,6 +843,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sensitivity: 2
   playerBody: {fileID: 192934538}
+  minXRotation: -90
+  maxXRotation: 90
+  minYRotation: -90
+  maxYRotation: 90
 --- !u!114 &330585549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -864,6 +867,7 @@ MonoBehaviour:
   initialDelay: 1
   canStartShaking: 1
   firstPersonLook: {fileID: 330585548}
+  rotateObject: {fileID: 0}
 --- !u!1001 &343395245
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4134,7 +4138,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: b210e9acfb50737458095926399c6cf0, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 82f9fbc4a1cede44cabae352215a619b, type: 2}
+      objectReference: {fileID: 2100000, guid: 74db882946783704fbbd7a86e4ff4ce0, type: 2}
     - target: {fileID: 919132149155446097, guid: b210e9acfb50737458095926399c6cf0, type: 3}
       propertyPath: m_Name
       value: LightBulb
