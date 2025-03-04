@@ -21,6 +21,9 @@ public class CameraShakeWithObject : MonoBehaviour
     [SerializeField] private FirstPersonLook firstPersonLook;
 
     [SerializeField] private RotateObject rotateObject;
+
+    [SerializeField] private float timeToBlowUpBulb = 5f;
+
     public void SetObject(GameObject sObject)
     {
         shakeObject = sObject;
@@ -55,6 +58,14 @@ public class CameraShakeWithObject : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             delayTimer += Time.deltaTime;
+
+            if(delayTimer > timeToBlowUpBulb)
+            {
+                shakeObject.GetComponent<Bulb>().BlowUp();
+                shakeObject = null;
+                delayTimer = 0f;
+            }
+
             firstPersonLook.ToggleMove(false); // Disable player movement while shaking
             // Handle the initial delay
             if (delayTimer < initialDelay)

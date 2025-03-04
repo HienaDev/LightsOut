@@ -33,7 +33,7 @@ public class ReverseAnimationTest : MonoBehaviour
                 animator.SetFloat("AnimationSpeedMultiplier", 1f);
                 Debug.Log("lets go");
             }
-            else if (Input.GetMouseButtonUp(0))
+            else if (Input.GetMouseButtonUp(0) || (cameraShakeWithObject.shakeObject == null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0))
             {
                 animator.SetFloat("AnimationSpeedMultiplier", -1f);
             }

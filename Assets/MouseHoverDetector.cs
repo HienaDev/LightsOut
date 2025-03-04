@@ -9,7 +9,7 @@ public class MouseHoverDetector : MonoBehaviour
 
     private bool hasBulb = false;
 
-
+    public bool hasButton = false;
     private void Start()
     {
         bulbManager = GetComponent<BulbManager>();
@@ -34,7 +34,17 @@ public class MouseHoverDetector : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             Bulb bulb = hit.collider.gameObject.GetComponent<Bulb>();
-            if(bulb != null)
+
+            if(hit.collider.gameObject.GetComponent<ButtonPress>() != null)
+            {
+                hasButton = true;
+            }
+            else
+            {
+                hasButton = false;
+            }
+
+            if (bulb != null)
             {
                 if(bulb.bulbIndex != bulbManager.bulbIndex)
                 {

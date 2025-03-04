@@ -23,6 +23,8 @@ public class BulbManager : MonoBehaviour
 
     private int currentRound = 0;
 
+    HashSet<int> badBulbIndices = new HashSet<int>();
+
     [Serializable]
     public struct Round
     {
@@ -30,14 +32,16 @@ public class BulbManager : MonoBehaviour
         public int numberOfBadBulbs;
     }
 
-    [SerializeField] private Round[] rounds;
+    [SerializeField] public Round[] rounds;
 
     void Start()
     {
         itemSwapper = GetComponent<ItemSwapper>();
         instantiatedBulbs = new List<GameObject>();
 
-        BulbSpawner(7, 2);
+        badBulbIndices = new HashSet<int>();
+
+        //BulbSpawner(7, 2);
         //StartCoroutine(TestRoundsCR());
     }
 
@@ -51,17 +55,20 @@ public class BulbManager : MonoBehaviour
         for (int i = 0; i < rounds.Length; i++)
         {
             yield return new WaitForSeconds(5f);
-            BulbSpawner(rounds[i].numberOfBulbs, rounds[i].numberOfBadBulbs);
+            BulbSpawner(i);
         }
     }
 
 
-    public void BulbSpawner(int numberOfBulbs, int numberOfBadBulbs)
+    public void BulbSpawner(int roundNumber)
     {
+
+        int numberOfBulbs = rounds[roundNumber].numberOfBulbs;
+        int numberOfBadBulbs = rounds[roundNumber].numberOfBadBulbs;
 
         foreach (GameObject bulb in instantiatedBulbs)
         {
-            Destroy(bulb);
+            //Destroy(bulb);
         }
 
         instantiatedBulbs.Clear();
@@ -83,8 +90,8 @@ public class BulbManager : MonoBehaviour
         float angleStep = bulbDistance / radius; // Angle step based on distance and radius
         float startAngle = -((numberOfBulbs - 1) * angleStep) / 2; // Center bulbs around player
 
+        badBulbIndices.Clear();
 
-        HashSet<int> badBulbIndices = new HashSet<int>();
 
         int attempts = 0;
         while (badBulbIndices.Count < numberOfBadBulbs && attempts < 100)
@@ -109,12 +116,20 @@ public class BulbManager : MonoBehaviour
             GameObject bulb = Instantiate(bulbPrefab);
             instantiatedBulbs.Add(bulb);
 
-            if(badBulbIndices.Contains(i))
-                bulb.GetComponent<Renderer>().material.color = Color.red;
-            else
-                bulb.GetComponent<Renderer>().material.color = Color.blue;
+            Bulb bulbScript = bulb.GetComponent<Bulb>();
 
-            bulb.GetComponent<Bulb>().bulbIndex = i;
+            if (badBulbIndices.Contains(i))
+            {
+
+                bulbScript.ToggleLight(false);
+            }
+            else
+            {
+                
+                bulbScript.ToggleLight(true);
+            }
+
+            bulbScript.bulbIndex = i;
             bulb.transform.position = new Vector3(xPos, initialPosition.position.y, zPos); // Keep Z fixed
         }
 
@@ -126,8 +141,8 @@ public class BulbManager : MonoBehaviour
     {
 
 
-        if (currentlySelectedBulb != null)
-            currentlySelectedBulb.GetComponent<Renderer>().material.color = Color.white;
+        //if (currentlySelectedBulb != null)
+        //    currentlySelectedBulb.GetComponent<Bulb>().bulbRenderer.material.color = Color.white;
 
         bulbIndex = index;
 
@@ -140,7 +155,41 @@ public class BulbManager : MonoBehaviour
         currentlySelectedBulb = instantiatedBulbs[bulbIndex];
         cameraShakeWithObject.SetObject(currentlySelectedBulb);
 
-        if (currentlySelectedBulb != null)
-            currentlySelectedBulb.GetComponent<Renderer>().material.color = Color.red;
+        //if (currentlySelectedBulb != null)
+        //    currentlySelectedBulb.GetComponent<Bulb>().bulbRenderer.material.color = Color.red;
     }
+
+    public bool CheckAliveBulb()
+    {
+        foreach (GameObject bulb in instantiatedBulbs)
+        {
+            if(badBulbIndices.Contains(bulb.GetComponent<Bulb>().bulbIndex))
+            {
+                Debug.Log("Bad bulb found");    
+                return true;
+            }
+        }
+
+        Debug.Log("Good bulbs only");
+        return false;
+    }
+
+    public void ToggleBulbsLight(bool toggle)
+    {
+        foreach (GameObject bulb in instantiatedBulbs)
+        {
+            Bulb bulbScript = bulb.GetComponent<Bulb>();
+
+            if(!badBulbIndices.Contains( bulbScript.bulbIndex))
+                bulb.GetComponent<Bulb>().ToggleLight(toggle);
+        }
+    }
+
+    public void BlowAllBulbs()
+    {
+        foreach (GameObject bulb in instantiatedBulbs)
+        {
+            bulb.GetComponent<Bulb>().BlowUp();
+        }
+    }   
 }

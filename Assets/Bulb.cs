@@ -1,3 +1,4 @@
+using Unity.Android.Gradle;
 using UnityEngine;
 
 public class Bulb : MonoBehaviour
@@ -10,8 +11,21 @@ public class Bulb : MonoBehaviour
     private Vector3 targetPosition; // Target position to move toward
     private Vector3 startPosition; // Starting position of the object
 
+    public Renderer bulbRenderer;
+
+    [SerializeField] private GameObject normalBulb;
+    [SerializeField] private GameObject brokenBulb;
+    [SerializeField] private GameObject pointLight;
+
+    [SerializeField] private Collider bulbCollider;
+    [SerializeField] private Rigidbody rb;
+
+
+
     private void Start()
     {
+
+
         // Store the starting position
         startPosition = transform.position;
 
@@ -53,4 +67,33 @@ public class Bulb : MonoBehaviour
         }
     }
 
+    public void BlowUp()
+    {
+
+        // Remove index of bulb to check which are still alive
+        bulbIndex = 9999;
+
+        bulbCollider.enabled = false;
+        normalBulb.SetActive(false);
+        brokenBulb.SetActive(true);
+        rb.isKinematic = false;
+
+        ToggleLight(false);
+    }
+
+    public void ToggleLight(bool toggle)
+    {
+        pointLight.SetActive(toggle);
+
+        if(toggle)
+        {
+            bulbRenderer.material.color = new Color(1f, 1f, 0f, 0.1f);
+            bulbRenderer.material.EnableKeyword("_EMISSION");
+        }
+        else
+        {
+            bulbRenderer.material.color = new Color(1f, 1f, 1f, 0.1f);
+            bulbRenderer.material.DisableKeyword("_EMISSION");
+        }
+    }
 }   

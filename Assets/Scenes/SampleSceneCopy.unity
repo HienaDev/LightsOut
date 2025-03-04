@@ -988,6 +988,7 @@ MonoBehaviour:
   initialDelay: 1
   canStartShaking: 1
   firstPersonLook: {fileID: 330585548}
+  rotateObject: {fileID: 0}
 --- !u!1001 &361425766
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -14,15 +14,12 @@ public class ItemSwapper : MonoBehaviour
 
 
 
-    void Update()
+
+
+    public void ToggleSwapping(bool toggle)
     {
-        // Toggle swapping on/off with the space bar
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            isSwapping = !isSwapping;
-            Debug.Log("Swapping is now: " + isSwapping);
-        }
-    }
+        isSwapping = toggle;
+    }   
 
     // Method to start swapping items
     public void SwapItemsInList(List<GameObject> items)
