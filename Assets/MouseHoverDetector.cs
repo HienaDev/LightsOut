@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class MouseHoverDetector : MonoBehaviour
 {
@@ -10,6 +12,13 @@ public class MouseHoverDetector : MonoBehaviour
     private bool hasBulb = false;
 
     public bool hasButton = false;
+
+    [SerializeField] private CameraShakeWithObject cameraShakeWithObject;   
+
+    [SerializeField] private Image mouseUI;
+    [SerializeField] private Sprite mouseClick;
+    [SerializeField] private Sprite mouseHold;
+
     private void Start()
     {
         bulbManager = GetComponent<BulbManager>();
@@ -29,14 +38,23 @@ public class MouseHoverDetector : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        
+
 
         if (Physics.Raycast(ray, out hit))
         {
             Bulb bulb = hit.collider.gameObject.GetComponent<Bulb>();
 
-            if(hit.collider.gameObject.GetComponent<ButtonPress>() != null)
+            if (bulb == null && hit.collider.gameObject.GetComponent<ButtonPress>() == null)
             {
+                mouseUI.gameObject.SetActive(false);
+            }
+
+            if (hit.collider.gameObject.GetComponent<ButtonPress>() != null)
+            {
+                if(cameraShakeWithObject.canStartShaking)
+                    mouseUI.gameObject.SetActive(true);
+
+                mouseUI.sprite = mouseClick;
                 hasButton = true;
             }
             else
@@ -46,13 +64,17 @@ public class MouseHoverDetector : MonoBehaviour
 
             if (bulb != null)
             {
-                if(bulb.bulbIndex != bulbManager.bulbIndex)
+                if (bulb.bulbIndex != bulbManager.bulbIndex)
                 {
                     hasBulb = true;
                     bulbManager.SelectBulb(bulb.bulbIndex);
                 }
+
+                if (cameraShakeWithObject.canStartShaking)
+                    mouseUI.gameObject.SetActive(true);
+                mouseUI.sprite = mouseHold;
             }
-            else if(hasBulb)
+            else if (hasBulb)
             {
                 hasBulb = false;
                 bulbManager.SelectBulb(-1);
@@ -61,11 +83,13 @@ public class MouseHoverDetector : MonoBehaviour
         }
         else
         {
-            if(hasBulb)
+            mouseUI.gameObject.SetActive(false);
+            if (hasBulb)
             {
                 hasBulb = false;
                 bulbManager.SelectBulb(-1);
             }
+
         }
 
     }

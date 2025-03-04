@@ -28,12 +28,12 @@ public class ReverseAnimationTest : MonoBehaviour
         
       
             
-            if (Input.GetMouseButton(0) && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1 && cameraShakeWithObject.shakeObject != null)
+            if (Input.GetMouseButton(0) && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1 && cameraShakeWithObject.shakeObject != null && cameraShakeWithObject.canStartShaking)
             {
                 animator.SetFloat("AnimationSpeedMultiplier", 1f);
                 Debug.Log("lets go");
             }
-            else if (Input.GetMouseButtonUp(0) || (cameraShakeWithObject.shakeObject == null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0))
+            else if ((Input.GetMouseButtonUp(0) || cameraShakeWithObject.shakeObject == null) && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0)
             {
                 animator.SetFloat("AnimationSpeedMultiplier", -1f);
             }
