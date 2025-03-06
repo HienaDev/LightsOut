@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6569878840941532244}
   - component: {fileID: 8166610902825181694}
   - component: {fileID: 6180139967306368535}
+  - component: {fileID: -5766787598689525011}
   m_Layer: 0
   m_Name: Bulb
   m_TagString: Untagged
@@ -107,6 +108,30 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-5766787598689525011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5109572656524851455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6c124fea0070ec4ba88c4968eb65514, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audios:
+  - {fileID: 8300000, guid: d25ff550a6291804282a5700e50132bf, type: 3}
+  - {fileID: 8300000, guid: a8e06380a9ff5f54b9ab78e899ce940a, type: 3}
+  - {fileID: 8300000, guid: 0af159c1d662d1c45ba36eab634237c7, type: 3}
+  - {fileID: 8300000, guid: c4ec2252a2ae6c64291a06fea724f824, type: 3}
+  - {fileID: 8300000, guid: a44b10eb59f92de47a39577e01596a74, type: 3}
+  - {fileID: 8300000, guid: 807e7c1d9576ce546a3db484873d234b, type: 3}
+  volume: 1
+  playOnBeggining: 0
+  secondSound: 0
+  audio2s: []
+  volume2: 1
 --- !u!1 &8466677621120621439
 GameObject:
   m_ObjectHideFlags: 0

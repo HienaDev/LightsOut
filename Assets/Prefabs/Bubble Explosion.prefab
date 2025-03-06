@@ -665,7 +665,7 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 2
+    type: 0
     angle: 25
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
@@ -4906,5 +4906,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audios:
   - {fileID: 8300000, guid: ff11e987ab6b8924e91cf7f37c6fc262, type: 3}
-  volume: 0.2
+  volume: 1
   playOnBeggining: 1

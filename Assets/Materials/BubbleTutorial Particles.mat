@@ -61,8 +61,8 @@ Material:
     - _AlphaToMask: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
-    - _Blend_Opacity: 0.5
-    - _Blend_Sharpness: 2.76
+    - _Blend_Opacity: 0.12
+    - _Blend_Sharpness: 2.34
     - _CastShadows: 1
     - _Cull: 2
     - _Divide_color: 0.3

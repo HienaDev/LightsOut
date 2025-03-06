@@ -1,7 +1,7 @@
 using System.Collections;
-using System.Runtime.CompilerServices;
+
 using TMPro;
-using UnityEditor.AnimatedValues;
+
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -29,34 +29,42 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject gameOverArm;
 
+    [SerializeField] private GameObject bubbleExplosion;
+
     [SerializeField] private TextMeshProUGUI bubbleText;
     [SerializeField] private GameObject bubbleTextObject;
-    private string tooManyBroken = "BULBB\n<color=black>(Greedy hands grasp too much. Restrain yourself.)</color>";
-    private string tooFewBroken = "BULBB\n<color=black>(Hesitation serves no one. Break what must be broken.)</color>";
-    private string roundStart = "BULBB\n<color=black>(The lights go out. Shadows dance. Watch closely… or suffer.)</color>";
-    private string shuffling = "BULBB\n<color=black>(A twist, a turn, a shuffle most cruel… Can you follow? Or shall the dark make a fool of you?)</color>";
-    private string choose = "BULBB\n<color=black>(Now, break the false, leave the true… but choose poorly, and I shall choose you.)</color>";
-    private string correctChoice = "BULBB\n<color=black>(Ah… a keen eye. Perhaps you are not lost to the dark just yet.)</color>";
-    private string breakTooManyOrFew = "BULBB\n<color=black>(Clumsy. Careless. A mind like a flickering bulb…)</color>";
-    private string failureSlap = "BULBB\n<color=black>(Fool! SLAP! That was not the way. Again!)</color>";
-    private string tooManySlapsDeath = "BULBB\n<color=black>(POP! A fragile thing… and so easily undone. The dark swallows all, even you.\")</color>";
-    private string finalSuccess = "BULBB\n<color=black>(Go on… do it. The light is gone. I am but a bubble waiting to burst…)</color>";
+    // a
+    private string tooManyBroken = "<size=150%>BULBB!</size>\n<color=black>(Greedy hands grasp too much. Restrain yourself.)</color>";
+    private string tooFewBroken = "<size=150%>BULBB!</size>\n<color=black>(Hesitation serves no one. Break what must be broken.)</color>";
+    private string roundStart = "<size=150%>BULBB!</size>\n<color=black>(The lights go out. Shadows dance. Watch closely… or suffer.)</color>";
+    private string shuffling = "<size=150%>BULBB!</size>\n<color=black>(LIGHTS OUT!\nA twist, a turn, a shuffle most cruel… Can you follow? Or shall the dark make a fool of you?)</color>";
+    private string choose = "<size=150%>BULBB!</size>\n<color=black>(Now, break the false, leave the true… but choose poorly, and I shall choose you.)</color>";
+    private string correctChoice = "<size=150%>BULBB!</size>\n<color=black>(Ah… a keen eye. Perhaps you are not lost to the dark just yet.)</color>";
+    private string breakTooManyOrFew = "<size=150%>BULBB!</size>\n<color=black>(Clumsy. Careless. A mind like a flickering bulb…)</color>";
+    private string failureSlap = "<size=150%>BULBB!</size>\n<color=black>(Fool! SLAP! That was not the way. Again!)</color>";
+    private string tooManySlapsDeath = "<size=150%>BULBB!</size>\n<color=black>(POP! A fragile thing… and so easily undone. The dark swallows all, even you.\")</color>";
+    private string finalSuccess = "<size=150%>BULBB!</size>\n<color=black>(Go on… do it. The light is gone. I am but a bubble waiting to burst…)</color>";
 
     [SerializeField] private GameObject baloonie;
     [SerializeField] private GameObject baloonieFinalDestination;
     [SerializeField] private float durationTravel = 5f;
 
+    [SerializeField] private PlaySound bubbleSound;
+
+    
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
 
-        StartCoroutine(StartRound(currentRound));
+        
     }
 
-    // Update is called once per frame
-    void Update()
+
+
+    public void StartGame()
     {
-        
+        StartCoroutine(StartRound(currentRound));
     }
 
     public void BreakBulb()
@@ -71,7 +79,9 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         bubbleTextObject.SetActive(false);
+        bubbleSound.SoundDo();
         yield return null;
+        
         bubbleTextObject.SetActive(true);
         bubbleText.text = roundStart;
         if (round > bulbManager.rounds.Length - 1)
@@ -89,8 +99,11 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         bubbleTextObject.SetActive(false);
+        bubbleSound.SoundDo();
         yield return null;
+        
         bubbleTextObject.SetActive(true);
+
         bubbleText.text = shuffling;
 
         bulbShuffler.ToggleSwapping(true);
@@ -102,8 +115,11 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(3f);
 
         bubbleTextObject.SetActive(false);
+        bubbleSound.SoundDo();
         yield return null;
+        
         bubbleTextObject.SetActive(true);
+
         bubbleText.text = choose;
 
         cameraShakeWithObject.canStartShaking = true;
@@ -114,8 +130,11 @@ public class GameManager : MonoBehaviour
             if(numberOfBulbsBroken > bulbManager.rounds[round].numberOfBadBulbs)
             {
                 bubbleTextObject.SetActive(false);
+                bubbleSound.SoundDo();
                 yield return null;
+                bubbleSound.SoundDo();
                 bubbleTextObject.SetActive(true);
+
                 bubbleText.text = tooManyBroken;
             }
             yield return null;
@@ -124,8 +143,11 @@ public class GameManager : MonoBehaviour
         if (numberOfBulbsBroken < bulbManager.rounds[round].numberOfBadBulbs)
         {
             bubbleTextObject.SetActive(false);
+            bubbleSound.SoundDo();
             yield return null;
+            
             bubbleTextObject.SetActive(true);
+
             bubbleText.text = tooFewBroken;
         }
 
@@ -141,10 +163,15 @@ public class GameManager : MonoBehaviour
         {
 
             slapLogic.ActivateSlapAnimation();
-            
+
+            yield return new WaitForSeconds(2f);
+
             bubbleTextObject.SetActive(false);
+            bubbleSound.SoundDo();
             yield return null;
-            bubbleTextObject.SetActive(true);yield return new WaitForSeconds(2f);
+            
+            bubbleTextObject.SetActive(true);
+
             bubbleText.text = failureSlap;
             yield return new WaitForSeconds(3f);
             lives -= 1;
@@ -152,13 +179,16 @@ public class GameManager : MonoBehaviour
         else
         {
             bubbleTextObject.SetActive(false);
+            bubbleSound.SoundDo();
             yield return null;
+            
             bubbleTextObject.SetActive(true);
+
             bubbleText.text = correctChoice;
         }
 
-            bulbManager.BlowAllBulbs();
-
+            bulbManager.BlowAllBulbs(); 
+        yield return new WaitForSeconds(3f);
         if (lives > 0)
         {
             currentRound += 1;
@@ -167,9 +197,13 @@ public class GameManager : MonoBehaviour
         else
         {
             bubbleTextObject.SetActive(false);
+            bubbleSound.SoundDo();
             yield return null;
+            
             bubbleTextObject.SetActive(true);
+
             bubbleText.text = tooManySlapsDeath;
+
             gameOverArm.SetActive(true);
             yield break;
         }
@@ -179,8 +213,11 @@ public class GameManager : MonoBehaviour
     private IEnumerator EndSequence()
     {
         bubbleTextObject.SetActive(false);
+        bubbleSound.SoundDo();
         yield return null;
+        
         bubbleTextObject.SetActive(true);
+
         bubbleText.text = finalSuccess;
 
         StartCoroutine(MoveToPosition(baloonie, baloonieFinalDestination.transform.position, durationTravel));
@@ -206,7 +243,11 @@ public class GameManager : MonoBehaviour
 
         // Ensure the object reaches the exact target position
         baloonie.transform.position = targetPos;
-
+        cameraShakeWithObject.canStartShaking = true;
         baloonie.GetComponent<Collider>().enabled = true;
+
+        GameObject bubbleCloneExplosion = Instantiate(bubbleExplosion);
+        bubbleCloneExplosion.transform.position = bubbleTextObject.transform.position;
+        Destroy(bubbleTextObject,0.1f);
     }
 }

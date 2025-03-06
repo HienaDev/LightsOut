@@ -16,10 +16,13 @@ public class ButtonPress : MonoBehaviour
 
     [SerializeField] private GameManager gameManager;
 
+    private PlaySound playSound;
+
     void Start()
     {
         // Save the original position of the button
         originalPosition = transform.position;
+        playSound = GetComponent<PlaySound>();
     }
 
     void Update()
@@ -71,6 +74,7 @@ public class ButtonPress : MonoBehaviour
         }
 
         gameManager.press = true;
+        playSound.SoundDo();
     }
 
 

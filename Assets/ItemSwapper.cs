@@ -7,6 +7,7 @@ public class ItemSwapper : MonoBehaviour
 
     public float arcHeight = 2.0f; // Height of the arc
     public float swapSpeed = 1.0f; // Speed of the swap
+    public float minRandomDelay = 1.0f; // Maximum random delay between swaps
     public float maxRandomDelay = 1.0f; // Maximum random delay between swaps
 
     private bool isSwapping = false; // Boolean to control swapping
@@ -67,7 +68,7 @@ public class ItemSwapper : MonoBehaviour
                     currentlySwapping.Add(items[index2]);
 
                     // Start the swap coroutine for these two items with a random delay
-                    StartCoroutine(SwapWithDelay(items[index1], items[index2], Random.Range(0, maxRandomDelay)));
+                    StartCoroutine(SwapWithDelay(items[index1], items[index2], Random.Range(minRandomDelay, maxRandomDelay)));
                 }
             }
 

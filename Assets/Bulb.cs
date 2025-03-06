@@ -21,9 +21,11 @@ public class Bulb : MonoBehaviour
 
     [SerializeField] public bool isBulb;
 
+    private PlaySound playSound;
+
     private void Start()
     {
-
+        playSound = GetComponent<PlaySound>();
         if (!isBulb)
             return;
         // Store the starting position
@@ -81,7 +83,7 @@ public class Bulb : MonoBehaviour
         if (!isBulb)
             return;
         rb.isKinematic = false;
-
+        playSound.SoundDo();
         ToggleLight(false);
     }
 

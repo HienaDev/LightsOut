@@ -20,6 +20,8 @@ public class CameraShakeWithObject : MonoBehaviour
 
     [SerializeField] private FirstPersonLook firstPersonLook;
 
+    [SerializeField] private Transform cameraEndPosition;
+
     [SerializeField] private RotateObject rotateObject;
 
     [SerializeField] private float timeToBlowUpBulb = 5f;
@@ -28,6 +30,9 @@ public class CameraShakeWithObject : MonoBehaviour
 
     public bool endShakeEvent = false;
 
+    [SerializeField] private AudioSource intenseSoundSource;
+    [SerializeField] private float startingTime = 1f;
+    private float defaultVolume;
     public void SetObject(GameObject sObject)
     {
         shakeObject = sObject;
@@ -35,9 +40,11 @@ public class CameraShakeWithObject : MonoBehaviour
 
     void Start()
     {
+        defaultVolume = intenseSoundSource.volume;
+        intenseSoundSource.volume = 0f;
         // Store the original position and rotation of the camera
-        originalCameraPosition = transform.position;
-        originalCameraRotation = transform.rotation;
+        originalCameraPosition = cameraEndPosition.transform.position;
+        originalCameraRotation = cameraEndPosition.transform.rotation;
     }
 
     void Update()
@@ -74,15 +81,30 @@ public class CameraShakeWithObject : MonoBehaviour
             return;
 
 
+        if(Input.GetMouseButtonDown(0))
+        {
+            
+            intenseSoundSource.time = startingTime;
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            intenseSoundSource.volume = 0;
+        }
 
         // Check if the left mouse button is held down
         if (Input.GetMouseButton(0))
         {
             delayTimer += Time.deltaTime;
-
-            if(delayTimer > timeToBlowUpBulb)
+            intenseSoundSource.volume += 0.35f * Time.deltaTime;
+            if(intenseSoundSource.volume > defaultVolume)
+            {
+                intenseSoundSource.volume = defaultVolume;
+            }
+            if (delayTimer > timeToBlowUpBulb)
             {
                 shakeObject.GetComponent<Bulb>().BlowUp();
+                intenseSoundSource.volume = 0;
                 gameManager.BreakBulb();
                 shakeObject = null;
                 delayTimer = 0f;

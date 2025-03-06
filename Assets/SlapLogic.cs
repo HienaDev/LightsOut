@@ -7,8 +7,11 @@ public class SlapLogic : MonoBehaviour
 
     private Animator animator;
 
+    private PlaySound playSound;
+
     private void Start()
     {
+        playSound = GetComponent<PlaySound>();
         animator = GetComponent<Animator>();
     }
 
@@ -20,5 +23,6 @@ public class SlapLogic : MonoBehaviour
     public void Slap()
     {
         rotateObject.Rotate360();
+        playSound.SoundDo();
     }
 }
