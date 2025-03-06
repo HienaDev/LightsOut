@@ -79,6 +79,7 @@ MonoBehaviour:
   pointLight: {fileID: 8466677621120621439}
   bulbCollider: {fileID: 6569878840941532244}
   rb: {fileID: 6180139967306368535}
+  isBulb: 1
 --- !u!54 &6180139967306368535
 Rigidbody:
   m_ObjectHideFlags: 0

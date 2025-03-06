@@ -1,4 +1,3 @@
-using Unity.Android.Gradle;
 using UnityEngine;
 
 public class Bulb : MonoBehaviour
@@ -20,12 +19,13 @@ public class Bulb : MonoBehaviour
     [SerializeField] private Collider bulbCollider;
     [SerializeField] private Rigidbody rb;
 
-
+    [SerializeField] public bool isBulb;
 
     private void Start()
     {
 
-
+        if (!isBulb)
+            return;
         // Store the starting position
         startPosition = transform.position;
 
@@ -37,6 +37,8 @@ public class Bulb : MonoBehaviour
 
     private void Update()
     {
+        if (!isBulb)
+            return;
         // Move the object toward the target position
         MoveTowardTarget();
     }
@@ -76,6 +78,8 @@ public class Bulb : MonoBehaviour
         bulbCollider.enabled = false;
         normalBulb.SetActive(false);
         brokenBulb.SetActive(true);
+        if (!isBulb)
+            return;
         rb.isKinematic = false;
 
         ToggleLight(false);

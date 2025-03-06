@@ -24,6 +24,10 @@ public class CameraShakeWithObject : MonoBehaviour
 
     [SerializeField] private float timeToBlowUpBulb = 5f;
 
+    [SerializeField] private GameManager gameManager;
+
+    public bool endShakeEvent = false;
+
     public void SetObject(GameObject sObject)
     {
         shakeObject = sObject;
@@ -38,6 +42,23 @@ public class CameraShakeWithObject : MonoBehaviour
 
     void Update()
     {
+
+        if (endShakeEvent)
+        {
+            // Generate smooth random shake using Perlin noise
+            float shakeX = Mathf.PerlinNoise(Time.time * shakeFrequency, 0) * 2 - 1;
+            float shakeY = Mathf.PerlinNoise(0, Time.time * shakeFrequency) * 2 - 1;
+            float shakeZ = Mathf.PerlinNoise(Time.time * shakeFrequency, Time.time * shakeFrequency) * 2 - 1;
+
+            // Combine the shake values into a Vector3 and scale by the intensity
+            Vector3 shakeOffset = new Vector3(shakeX, shakeY, shakeZ) * maxShakeIntensity * 2;
+
+            // Apply the shake to the camera's position relative to its original position
+            transform.position = originalCameraPosition + shakeOffset;
+            return;
+        }
+            
+
         // If no object is assigned, do nothing
         if (shakeObject == null)
         {
@@ -62,8 +83,10 @@ public class CameraShakeWithObject : MonoBehaviour
             if(delayTimer > timeToBlowUpBulb)
             {
                 shakeObject.GetComponent<Bulb>().BlowUp();
+                gameManager.BreakBulb();
                 shakeObject = null;
                 delayTimer = 0f;
+                return;
             }
 
             firstPersonLook.ToggleMove(false); // Disable player movement while shaking

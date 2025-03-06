@@ -64,6 +64,8 @@ public class MouseHoverDetector : MonoBehaviour
 
             if (bulb != null)
             {
+                if(!bulb.isBulb)
+                    cameraShakeWithObject.SetObject(bulb.gameObject);
                 if (bulb.bulbIndex != bulbManager.bulbIndex)
                 {
                     hasBulb = true;

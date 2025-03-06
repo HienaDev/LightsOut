@@ -19,6 +19,6 @@ public class HoverEffect : MonoBehaviour
         float newY = startPosition.y + Mathf.Sin(Time.time * hoverSpeed) * hoverHeight;
 
         // Update the object's position
-        transform.position = new Vector3(startPosition.x, newY, startPosition.z);
+        transform.position = new Vector3(transform.position.x, newY, transform.position.z);
     }
 }
