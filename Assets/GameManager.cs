@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private CameraShakeWithObject cameraShakeWithObject;
 
-    private int currentRound = 0;
+    public int currentRound = 0;
 
     public bool waitingForPress = false;
     public bool press = false;
@@ -36,14 +36,14 @@ public class GameManager : MonoBehaviour
     // a
     private string tooManyBroken = "<size=150%>BULBB!</size>\n<color=black>(Greedy hands grasp too much. Restrain yourself.)</color>";
     private string tooFewBroken = "<size=150%>BULBB!</size>\n<color=black>(Hesitation serves no one. Break what must be broken.)</color>";
-    private string roundStart = "<size=150%>BULBB!</size>\n<color=black>(The lights go out. Shadows dance. Watch closely… or suffer.)</color>";
-    private string shuffling = "<size=150%>BULBB!</size>\n<color=black>(LIGHTS OUT!\nA twist, a turn, a shuffle most cruel… Can you follow? Or shall the dark make a fool of you?)</color>";
-    private string choose = "<size=150%>BULBB!</size>\n<color=black>(Now, break the false, leave the true… but choose poorly, and I shall choose you.)</color>";
-    private string correctChoice = "<size=150%>BULBB!</size>\n<color=black>(Ah… a keen eye. Perhaps you are not lost to the dark just yet.)</color>";
-    private string breakTooManyOrFew = "<size=150%>BULBB!</size>\n<color=black>(Clumsy. Careless. A mind like a flickering bulb…)</color>";
+    private string roundStart = "<size=150%>BULBB!</size>\n<color=black>(The lights go out. Shadows dance. Watch closelyï¿½ or suffer.)</color>";
+    private string shuffling = "<size=150%>BULBB!</size>\n<color=black>(LIGHTS OUT!\nA twist, a turn, a shuffle most cruelï¿½ Can you follow? Or shall the dark make a fool of you?)</color>";
+    private string choose = "<size=150%>BULBB!</size>\n<color=black>(Now, break the false, leave the trueï¿½ but choose poorly, and I shall choose you.)</color>";
+    private string correctChoice = "<size=150%>BULBB!</size>\n<color=black>(Ahï¿½ a keen eye. Perhaps you are not lost to the dark just yet.)</color>";
+    private string breakTooManyOrFew = "<size=150%>BULBB!</size>\n<color=black>(Clumsy. Careless. A mind like a flickering bulbï¿½)</color>";
     private string failureSlap = "<size=150%>BULBB!</size>\n<color=black>(Fool! SLAP! That was not the way. Again!)</color>";
-    private string tooManySlapsDeath = "<size=150%>BULBB!</size>\n<color=black>(POP! A fragile thing… and so easily undone. The dark swallows all, even you.\")</color>";
-    private string finalSuccess = "<size=150%>BULBB!</size>\n<color=black>(Go on… do it. The light is gone. I am but a bubble waiting to burst…)</color>";
+    private string tooManySlapsDeath = "<size=150%>BULBB!</size>\n<color=black>(POP! A fragile thingï¿½ and so easily undone. The dark swallows all, even you.\")</color>";
+    private string finalSuccess = "<size=150%>BULBB!</size>\n<color=black>(Go onï¿½ do it. The light is gone. I am but a bubble waiting to burstï¿½)</color>";
 
     [SerializeField] private GameObject baloonie;
     [SerializeField] private GameObject baloonieFinalDestination;
@@ -127,16 +127,7 @@ public class GameManager : MonoBehaviour
 
         while (press == false)
         {
-            if(numberOfBulbsBroken > bulbManager.rounds[round].numberOfBadBulbs)
-            {
-                bubbleTextObject.SetActive(false);
-                bubbleSound.SoundDo();
-                yield return null;
-                bubbleSound.SoundDo();
-                bubbleTextObject.SetActive(true);
-
-                bubbleText.text = tooManyBroken;
-            }
+  
             yield return null;
         }
 
@@ -145,11 +136,23 @@ public class GameManager : MonoBehaviour
             bubbleTextObject.SetActive(false);
             bubbleSound.SoundDo();
             yield return null;
-            
+
             bubbleTextObject.SetActive(true);
 
             bubbleText.text = tooFewBroken;
         }
+        else   if (numberOfBulbsBroken > bulbManager.rounds[round].numberOfBadBulbs)
+            {
+                bubbleTextObject.SetActive(false);
+                bubbleSound.SoundDo();
+                yield return null;
+                bubbleSound.SoundDo();
+                bubbleTextObject.SetActive(true);
+
+                bubbleText.text = tooManyBroken;
+                
+                press = true;
+            }
 
         cameraShakeWithObject.canStartShaking = false;
         press = false;
@@ -183,7 +186,7 @@ public class GameManager : MonoBehaviour
             yield return null;
             
             bubbleTextObject.SetActive(true);
-
+            currentRound += 1;
             bubbleText.text = correctChoice;
         }
 
@@ -191,7 +194,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(3f);
         if (lives > 0)
         {
-            currentRound += 1;
+            
             StartCoroutine(StartRound(currentRound));
         }
         else

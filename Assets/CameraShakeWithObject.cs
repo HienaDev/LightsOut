@@ -103,6 +103,7 @@ public class CameraShakeWithObject : MonoBehaviour
             }
             if (delayTimer > timeToBlowUpBulb)
             {
+                shakeObject.GetComponent<Bulb>().blood = true;
                 shakeObject.GetComponent<Bulb>().BlowUp();
                 intenseSoundSource.volume = 0;
                 gameManager.BreakBulb();

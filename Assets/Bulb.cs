@@ -23,6 +23,10 @@ public class Bulb : MonoBehaviour
 
     private PlaySound playSound;
 
+    [SerializeField] private GameObject bloodVFX;
+
+    public bool blood = false;
+
     private void Start()
     {
         playSound = GetComponent<PlaySound>();
@@ -80,10 +84,21 @@ public class Bulb : MonoBehaviour
         bulbCollider.enabled = false;
         normalBulb.SetActive(false);
         brokenBulb.SetActive(true);
-        if (!isBulb)
-            return;
-        rb.isKinematic = false;
         playSound.SoundDo();
+
+        if(blood)
+        {
+            GameObject blood = Instantiate(bloodVFX);
+            blood.transform.position = transform.position;
+        }
+
+        if (!isBulb)
+        {
+            return;
+        }
+      
+        rb.isKinematic = false;
+
         ToggleLight(false);
     }
 
